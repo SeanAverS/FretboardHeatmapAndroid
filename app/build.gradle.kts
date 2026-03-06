@@ -5,16 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.fretboardheatmap"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+        compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.fretboardheatmap"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
