@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -15,6 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.fretboardheatmap.ui.theme.FretboardHeatmapTheme
@@ -63,6 +65,12 @@ class MainActivity : ComponentActivity() {
                                 isDropdownExpanded = false
                             }
                         )
+
+                        // guitar neck
+                        Box(contentAlignment = Alignment.Center) {
+                            GuitarNeckView()
+                            GuitarStringsView()
+                        }
                     }
                 }
             }
@@ -190,4 +198,117 @@ fun TopMenuButton(title: String, isSelected: Boolean, onClick: () -> Unit) {
                 indication = null
             ) { onClick() }
     )
+}
+
+/**
+ * Generate fretboard wood and frets for guitar neck
+ */
+@Composable
+fun GuitarNeckView() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(265.dp),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        // fretboard wood
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF1A0005), // Start
+                            Color(0xFF40261A), // Middle
+                            Color(0xFF1A0D05)  // End
+                        )
+                    )
+                )
+        )
+
+        // frets (1-12)
+        Row(
+            modifier = Modifier.fillMaxHeight(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // nut
+            Box(
+                modifier = Modifier
+                    .width(10.dp)
+                    .fillMaxHeight()
+                    .background(Color(0xFFE6E6E6))
+            )
+
+            // frets
+            GuitarSpecs.frets.forEachIndexed { index, fretWidth ->
+                // inlays
+                Box(
+                    modifier = Modifier
+                        .width(fretWidth) // keep inlay inside current fret
+                        .fillMaxHeight(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    FretInlays(index)
+                }
+
+                // wire
+                Box(
+                    modifier = Modifier
+                        .width(3.dp)
+                        .fillMaxHeight()
+                        .background(Color.Gray)
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Fret inlay styling (grey circles)
+ * @param index current fret on the guitar neck
+ */
+@Composable
+private fun FretInlays(index: Int) {
+    val inlayColor = Color(0xFFB3B3B3)
+
+    if (listOf(2, 4, 6, 8).contains(index)) { // single dot
+        Box(
+            modifier = Modifier
+                .size(20.dp)
+                .background(inlayColor, shape = CircleShape)
+        )
+    } else if (index == 11) { // double dot
+        Column(
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.spacedBy(55.dp, Alignment.CenterVertically)
+        ) {
+            Box(modifier = Modifier.size(20.dp).background(inlayColor, shape = CircleShape))
+            Box(modifier = Modifier.size(20.dp).background(inlayColor, shape = CircleShape))
+        }
+    }
+}
+
+/**
+ * Generate guitar strings on fretboard
+ */
+@Composable
+fun GuitarStringsView() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(265.dp),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+
+        Spacer(modifier = Modifier.weight(1f))
+        GuitarSpecs.strings.forEach { thickness ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(thickness)
+                    .background(Color(0xFF999999))
+            )
+            Spacer(modifier = Modifier.weight(1f))
+        }
+    }
 }
