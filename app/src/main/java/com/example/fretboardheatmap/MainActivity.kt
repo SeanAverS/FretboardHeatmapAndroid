@@ -66,6 +66,8 @@ class MainActivity : ComponentActivity() {
                             }
                         )
 
+                        Spacer(modifier = Modifier.height(3.3.dp))
+
                         // guitar neck
                         Box(contentAlignment = Alignment.Center) {
                             GuitarNeckView()
@@ -103,7 +105,7 @@ fun TopMenuArea(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp),
+            .padding(top = 0.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // center label and top menu buttons
