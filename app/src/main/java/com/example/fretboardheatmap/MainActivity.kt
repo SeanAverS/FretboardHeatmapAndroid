@@ -230,7 +230,7 @@ fun GuitarNeckView() {
 
         // frets (1-12)
         Row(
-            modifier = Modifier.fillMaxHeight(),
+            modifier = Modifier.fillMaxWidth().fillMaxHeight(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // nut
@@ -246,7 +246,7 @@ fun GuitarNeckView() {
                 // inlays
                 Box(
                     modifier = Modifier
-                        .width(fretWidth) // keep inlay inside current fret
+                        .weight(fretWidth.value) // keep inlay inside current fret
                         .fillMaxHeight(),
                     contentAlignment = Alignment.Center
                 ) {
