@@ -116,7 +116,11 @@ fun TopMenuArea(
             horizontalArrangement = Arrangement.spacedBy(40.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TopMenuButton("LABELS", labelsButton, onLabelsButtonToggle)
+            LabelToggleButton(
+                isActive = labelsButton,
+                onClick = onLabelsButtonToggle
+            )
+
             TopMenuButton("CHORDS", topMenuButton == TopMenuChoice.CHORDS) {
                 onTopMenuButtonSelect(
                     TopMenuChoice.CHORDS
@@ -183,23 +187,44 @@ fun TopMenuArea(
 }
 
 /**
- * Style and remember state of the selected top menu button
- * @param title selected top menu button ("CHORDS" or "SCALES")
- * @param isSelected state of selected top menu button
- * @param onClick toggle selected top menu button functions
+ * Style and render label and top menu buttons
+ * @param title of button
+ * @param isHighlighted current state of button
+ * @param onClick toggle MenuText functions
  */
 @Composable
-fun TopMenuButton(title: String, isSelected: Boolean, onClick: () -> Unit) {
+private fun MenuText(title: String, isHighlighted: Boolean, onClick: () -> Unit) {
     Text(
         text = title,
-        color = if (isSelected) Color.Yellow else Color.White,
+        color = if (isHighlighted) Color.Yellow else Color.White,
         modifier = Modifier
-            // cancel ripple effect for color change effect
+            // remove default ripple effect
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) { onClick() }
     )
+}
+
+/**
+ * MenuText helper function for "LABELS"
+ * @param isActive current state of button
+ * @param onClick toggle MenuText functions
+ */
+@Composable
+fun LabelToggleButton(isActive: Boolean, onClick: () -> Unit) {
+    MenuText(title = "LABELS", isHighlighted = isActive, onClick = onClick)
+}
+
+/**
+ * MenuText helper function for "CHORDS" and "SCALES"
+ * @param title of button
+ * @param isSelected current state of selected button
+ * @param onClick toggle MenuText functions
+ */
+@Composable
+fun TopMenuButton(title: String, isSelected: Boolean, onClick: () -> Unit) {
+    MenuText(title = title, isHighlighted = isSelected, onClick = onClick)
 }
 
 /**
