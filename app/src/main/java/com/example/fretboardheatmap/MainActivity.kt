@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.fretboardheatmap.ui.theme.FretboardHeatmapTheme
+import androidx.compose.ui.unit.sp
 
 enum class TopMenuChoice { CHORDS, SCALES }
 
@@ -35,6 +36,7 @@ class MainActivity : ComponentActivity() {
                 var chordsDropdown by remember { mutableStateOf("Major") }
                 var scalesDropdown by remember { mutableStateOf("Maj Pentatonic") }
                 var isDropdownExpanded by remember { mutableStateOf(false) }
+                var selectedRoot by remember { mutableStateOf("") } // user choice
 
                 // top menu area
                 Scaffold(
@@ -73,6 +75,13 @@ class MainActivity : ComponentActivity() {
                             GuitarNeckView()
                             GuitarStringsView()
                         }
+
+                        // bottom menu
+                        BottomMenuArea(
+                            selectedRoot = selectedRoot,
+                            onRootSelected = { selectedRoot = it },
+                            topMenuChoice = topMenuButton // "CHORDS" or "SCALES"
+                        )
                     }
                 }
             }
@@ -336,6 +345,55 @@ fun GuitarStringsView() {
                     .background(Color(0xFF999999))
             )
             Spacer(modifier = Modifier.weight(1f))
+        }
+    }
+}
+
+/**
+* Generate labels for the bottom menu
+ * @param selectedRoot the label user has chosen
+ * @param onRootSelected current state of label user has chosen
+ * @param topMenuChoice current state of top menu button
+*/
+@Composable
+fun BottomMenuArea(
+    selectedRoot: String,
+    onRootSelected: (String) -> Unit,
+    topMenuChoice: TopMenuChoice?
+) {
+    if (topMenuChoice != null) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 15.dp, bottom = 20.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                // label styling and text content
+                GuitarSpecs.roots.forEach { root ->
+                    val isSelected = (selectedRoot == root)
+                    Box(
+                        modifier = Modifier
+                            .size(width = 60.dp, height = 70.dp)
+                            .background(
+                                color = if (isSelected) Color.Yellow.copy(alpha = 0.2f) else Color.White.copy(alpha = 0.1f),
+                                shape = RoundedCornerShape(8.dp)
+                            )
+                            .clickable { onRootSelected(root) },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = root,
+                            color = if (isSelected) Color.Yellow else Color.White,
+                            fontSize = 16.sp,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                        )
+                    }
+                }
+            }
         }
     }
 }
