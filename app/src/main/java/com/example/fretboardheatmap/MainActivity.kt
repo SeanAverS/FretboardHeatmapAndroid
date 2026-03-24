@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.fretboardheatmap.ui.theme.FretboardHeatmapTheme
 import androidx.compose.ui.unit.sp
 
-enum class TopMenuChoice { CHORDS, SCALES }
+enum class TopMenuChoice { CHORDS, SCALES } // only valid choices
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
