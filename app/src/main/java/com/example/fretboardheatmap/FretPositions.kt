@@ -66,16 +66,16 @@ object FretPositions {
         )
     )
 
-    /**
-     * Prepare dictionaries for top menu dropdown
-     * @param forTopMenu top menu choice
-     */
-    fun dropdownChoices(forTopMenu: TopMenuChoice): List<String> {
-        return when (forTopMenu) {
-            TopMenuChoice.CHORDS -> chords.keys.sorted()
-            TopMenuChoice.SCALES -> scales.keys.sorted()
-        }
-    }
+//    /**
+//     * Prepare dictionaries for top menu dropdown
+//     * @param forTopMenu top menu choice
+//     */
+//    fun dropdownChoices(forTopMenu: TopMenuChoice): List<String> {
+//        return when (forTopMenu) {
+//            TopMenuChoice.CHORDS -> chords.keys.sorted()
+//            TopMenuChoice.SCALES -> scales.keys.sorted()
+//        }
+//    }
 
     /**
      * Prepare fret notes for heatmap
