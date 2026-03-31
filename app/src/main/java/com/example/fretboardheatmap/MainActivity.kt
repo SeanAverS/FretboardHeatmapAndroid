@@ -70,10 +70,18 @@ class MainActivity : ComponentActivity() {
 
                         Spacer(modifier = Modifier.height(3.3.dp))
 
-                        // guitar neck
-                        Box(contentAlignment = Alignment.Center) {
+                        Box(modifier = Modifier.height(265.dp), contentAlignment = Alignment.Center) {
+                            // guitar neck and strings
                             GuitarNeckView()
                             GuitarStringsView()
+
+                            // heatmap above neck and strings
+                            HeatmapLogic(
+                                selectedRoot = selectedRoot,
+                                topMenu = topMenuButton,
+                                selectedDropdownOption = if (topMenuButton == TopMenuChoice.CHORDS) chordsDropdown else scalesDropdown,
+                                noteLabels = labelsButton
+                            )
                         }
 
                         // bottom menu
@@ -333,18 +341,23 @@ fun GuitarStringsView() {
         modifier = Modifier
             .fillMaxWidth()
             .height(265.dp),
-        verticalArrangement = Arrangement.SpaceBetween
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
 
-        Spacer(modifier = Modifier.weight(1f))
         GuitarSpecs.strings.forEach { thickness ->
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(thickness)
-                    .background(Color(0xFF999999))
-            )
-            Spacer(modifier = Modifier.weight(1f))
+                    .height(24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(thickness)
+                        .background(Color(0xFF999999))
+                )
+            }
         }
     }
 }
