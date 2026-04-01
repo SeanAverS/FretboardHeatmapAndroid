@@ -186,7 +186,7 @@ fun NoteCircle(
     Box( // dot size
         modifier = Modifier
             .size(24.dp)
-            .background(if (isRoot) Color.Red else Color.Blue, shape = CircleShape),
+            .background(if (isRoot) Color.Red else Color(0xFF208FFA), shape = CircleShape),
         contentAlignment = Alignment.Center
     ) { // labels
         if (showLabels && labelText.isNotEmpty()) {
