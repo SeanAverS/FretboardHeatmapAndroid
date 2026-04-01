@@ -37,6 +37,11 @@ class MainActivity : ComponentActivity() {
                 var scalesDropdown by remember { mutableStateOf("Maj Pentatonic") }
                 var isDropdownExpanded by remember { mutableStateOf(false) }
                 var selectedRoot by remember { mutableStateOf("") } // user choice
+                val currentDropdownChoice by remember {
+                    derivedStateOf {
+                        if (topMenuButton == TopMenuChoice.CHORDS) chordsDropdown else scalesDropdown
+                    }
+                } // only load BottomMenuArea when these change
 
                 // top menu area
                 Scaffold(
@@ -99,7 +104,7 @@ class MainActivity : ComponentActivity() {
                             selectedRoot = selectedRoot,
                             onRootSelected = { selectedRoot = it },
                             topMenuChoice = topMenuButton,
-                            dropdownChoice = if (topMenuButton == TopMenuChoice.CHORDS) chordsDropdown else scalesDropdown
+                            dropdownChoice = currentDropdownChoice
                         )
                     }
                 }
