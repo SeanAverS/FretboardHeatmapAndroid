@@ -50,11 +50,21 @@ class MainActivity : ComponentActivity() {
                             onLabelsButtonToggle = { labelsButton = !labelsButton },
 
                             topMenuButton = topMenuButton,
-                            onTopMenuButtonSelect = {
-                                topMenuButton = it // "CHORDS" or "SCALES"
+                            onTopMenuButtonSelect = { selectedMenu ->
+                                val currentDropdown = if (topMenuButton == TopMenuChoice.CHORDS) chordsDropdown else scalesDropdown
+
+                                // correct current key (major or minor)
+                                val matchedKey = TopMenuKeyMatcher.getMatch(currentDropdown, selectedMenu)
+
+                                if (selectedMenu == TopMenuChoice.CHORDS) {
+                                    chordsDropdown = matchedKey
+                                } else {
+                                    scalesDropdown = matchedKey
+                                }
+
+                                topMenuButton = selectedMenu
                                 isDropdownExpanded = false
                             },
-
                             // dropdown
                             dropdownTitle = if (topMenuButton == TopMenuChoice.CHORDS) chordsDropdown else scalesDropdown,
 
@@ -88,7 +98,8 @@ class MainActivity : ComponentActivity() {
                         BottomMenuArea(
                             selectedRoot = selectedRoot,
                             onRootSelected = { selectedRoot = it },
-                            topMenuChoice = topMenuButton // "CHORDS" or "SCALES"
+                            topMenuChoice = topMenuButton,
+                            dropdownChoice = if (topMenuButton == TopMenuChoice.CHORDS) chordsDropdown else scalesDropdown
                         )
                     }
                 }
@@ -372,7 +383,8 @@ fun GuitarStringsView() {
 fun BottomMenuArea(
     selectedRoot: String,
     onRootSelected: (String) -> Unit,
-    topMenuChoice: TopMenuChoice?
+    topMenuChoice: TopMenuChoice?,
+    dropdownChoice: String
 ) {
     if (topMenuChoice != null) {
         Box(
@@ -384,9 +396,11 @@ fun BottomMenuArea(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                // label styling and text content
                 GuitarSpecs.roots.forEach { root ->
+                    // calculate correct label (major or minor)
+                    val displayLabel = BottomMenuLabels.getLabels(root, topMenuChoice, dropdownChoice)
                     val isSelected = (selectedRoot == root)
+
                     Box(
                         modifier = Modifier
                             .size(width = 60.dp, height = 70.dp)
@@ -398,7 +412,7 @@ fun BottomMenuArea(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = root,
+                            text = displayLabel,
                             color = if (isSelected) Color.Yellow else Color.White,
                             fontSize = 16.sp,
                             style = MaterialTheme.typography.titleMedium,
