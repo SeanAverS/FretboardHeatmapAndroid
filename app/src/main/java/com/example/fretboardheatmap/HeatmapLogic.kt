@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -98,9 +99,10 @@ private fun HeatmapFrets(
     noteLabels: Boolean
 ) {
     // get fret positions and finger numbers
-    val positions = FretPositions.getFretMap(topMenu, selectedDropdownOption, selectedRoot)
+    val stringPositions = remember(topMenu, selectedDropdownOption, selectedRoot, string) {
+        FretPositions.getFretMap(topMenu, selectedDropdownOption, selectedRoot)[string] ?: emptyList()
+    }
 
-    val stringPositions = positions[string] ?: emptyList()
 
     // center each fret on current string
     Row(modifier = Modifier.fillMaxSize()) {
@@ -180,8 +182,13 @@ fun NoteCircle(
     dropdown: String,
     showLabels: Boolean
 ) {
-    val isRoot = NoteAlphabet.getNoteName(string, fret) == root
-    val labelText = FretLabels.getLabels(topMenu, root, dropdown, string, fret)
+    val isRoot = remember(root, string, fret) {
+        NoteAlphabet.getNoteName(string, fret) == root
+    }
+
+    val labelText = remember(topMenu, root, dropdown, string, fret) {
+        FretLabels.getLabels(topMenu, root, dropdown, string, fret)
+    }
 
     Box( // dot size
         modifier = Modifier
