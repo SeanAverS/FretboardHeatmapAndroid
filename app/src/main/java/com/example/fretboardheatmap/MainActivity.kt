@@ -114,15 +114,18 @@ class MainActivity : ComponentActivity() {
 }
 
 /**
- * The Top Menu section containing navigation and dropdown controls
- * @param labelsButton current LABELS button visibility
- * @param onLabelsButtonToggle toggle LABELS button visibility
- * @param topMenuButton current "CHORDS" or "SCALES" button selection
- * @param onTopMenuButtonSelect toggle selected TopMenuButton functions
- * @param dropdownTitle initial text of dropdown
- * @param dropdownDisplay current dropdown display based on topMenuButton
- * @param onDropdownToggle toggle current dropdown visibility
- * @param onDropdownSelect process options for current dropdown
+ * The Top Menu section containing navigation and dropdown controls.
+ *
+ * This component manages state transitions between [TopMenuChoice.CHORDS] and [TopMenuChoice.SCALES], as well as the visibility of the [labelsButton].
+ *
+ * @param labelsButton current state of note labels button
+ * @param onLabelsButtonToggle toggle [labelsButton] state
+ * @param topMenuButton current active [TopMenuChoice]
+ * @param onTopMenuButtonSelect handle new [TopMenuChoice]
+ * @param dropdownTitle text displayed on current dropdown button
+ * @param dropdownDisplay current state of dropdown
+ * @param onDropdownToggle flip [dropdownDisplay] state.
+ * @param onDropdownSelect callback when choosing dropdown option
  */
 @Composable
 fun TopMenuArea(
